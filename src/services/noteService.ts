@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from 'axios';
+import axios, { type AxiosInstance } from 'axios';
 import type { Note, NoteTag } from '../types/note';
 
 const API_URL = 'https://notehub-public.goit.study/api';

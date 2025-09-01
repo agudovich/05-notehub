@@ -5,8 +5,10 @@ import SearchBox from '../SearchBox/SearchBox';
 import NoteList from '../NoteList/NoteList';
 import Pagination from '../Pagination/Pagination';
 import Modal from '../Modal/Modal';
-import NoteForm, { NoteFormValues } from '../NoteForm/NoteForm';
+import NoteForm from '../NoteForm/NoteForm';
+import type { NoteFormValues } from '../NoteForm/NoteForm';
 import { createNote, fetchNotes } from '../../services/noteService';
+import type { FetchNotesResponse } from '../../services/noteService';
 import css from './App.module.css';
 
 export default function App() {
@@ -27,10 +29,10 @@ export default function App() {
     },
   });
 
-  const { data } = useQuery({
+  const { data } = useQuery<FetchNotesResponse>({
     queryKey: ['notes', page, perPage, debouncedSearch],
     queryFn: () => fetchNotes({ page, perPage, search: debouncedSearch }),
-    keepPreviousData: true,
+    placeholderData: (prev) => prev,
   });
 
   const totalPages = data?.totalPages ?? 1;
@@ -59,7 +61,7 @@ export default function App() {
         <NoteForm
           onCancel={() => setIsOpen(false)}
           onSubmit={(values) => createMutation.mutate(values)}
-          isSubmitting={createMutation.isLoading}
+          isSubmitting={createMutation.isPending}
         />
       </Modal>
     </div>
